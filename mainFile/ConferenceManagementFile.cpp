@@ -269,45 +269,103 @@ void exploreConferences(User &user)
         }
     }
 }
-
-void sign_up()
-{
+void sign_up() {
     std::string name;
-    short int age;
+    std::string ageStr;
     std::string regNO;
     std::string gender;
     std::string username;
     std::string password;
     std::string email;
 
-    // @ <lengthy medium task> the getters defined in the user class must be overloaded 
-    // with static functions having the similar signature
-    // to check whether the followign attributes are correct or just name it somn
-    // like std :: string get<Attribute>Input() and make it use cin within the function
-    // like input in python. please make this static so everyother class can do this.
-    // the whole point of this is to check for abnormalities. use regex for email, name, username, reg no
-    // and finally use it here in place of the cin statements
-    std::cout << "\nEnter your details:\n";
-    std::cout << "\nName: ";
-    std::cin >> name;
-    std::cout << "\nAge: ";
-    std::cin >> age;
-    std::cout << "\nRegistration Number: ";
-    std::cin >> regNO;
-    std::cout << "\nGender: ";
-    std::cin >> gender;
-    std::cout << "\nUsername: ";
-    std::cin >> username;
-    std::cout << "\nPassword: ";
-    // have to create a function for setting good password
-    std::cin >> password;
-    std::cout << "\nEmail: ";
-    std::cin >> email;
+    auto isValidName = [](const std::string& name) {
+        return std::regex_match(name, std::regex("^[a-zA-Z ]+$"));
+    };
 
-    // Create a new User and add it to the userMap
-    User(name, age, regNO, gender, username, password, email); 
-    std :: cout << "\nSigned up successfully.\n\n";
-    page_1();
+    auto isValidAge = [](const std::string& age) {
+        return std::regex_match(age, std::regex("^[1-9][0-9]*$"));
+    };
+
+    auto isValidRegNo = [](const std::string& regNo) {
+        return std::regex_match(regNo, std::regex("^[a-zA-Z0-9]+$"));
+    };
+
+    auto isValidGender = [](const std::string& gender) {
+        return (gender == "male" || gender == "female");
+    };
+
+    auto isValidUsername = [](const std::string& username) {
+        return std::regex_match(username, std::regex("^[a-zA-Z0-9]+$"));
+    };
+
+    auto isValidPassword = [](const std::string& password) {
+        return (password.length() >= 6);
+    };
+
+    auto isValidEmail = [](const std::string& email) {
+        return std::regex_match(email, std::regex("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"));
+    };
+
+    std::cout << "\nEnter your details:\n\n";
+
+    do {
+        std::cout << "Name: ";
+        std::getline(std::cin, name);
+        if (!isValidName(name)) {
+            std::cout << "Please enter a valid name.\n\n";
+        }
+    } while (!isValidName(name));
+
+    do {
+        std::cout << "\nAge: ";
+        std::getline(std::cin, ageStr);
+        if (!isValidAge(ageStr)) {
+            std::cout << "Please enter a valid age.\n\n";
+        }
+    } while (!isValidAge(ageStr));
+    int age = std::stoi(ageStr);
+
+    do {
+        std::cout << "\nRegistration Number: ";
+        std::getline(std::cin, regNO);
+        if (!isValidRegNo(regNO)) {
+            std::cout << "Please enter a valid registration number.\n\n";
+        }
+    } while (!isValidRegNo(regNO));
+
+    do {
+        std::cout << "\nGender(male/female): ";
+        std::getline(std::cin, gender);
+        if (!isValidGender(gender)) {
+            std::cout << "Please enter a valid gender.\n\n";
+        }
+    } while (!isValidGender(gender));
+
+    do {
+        std::cout << "\nUsername: ";
+        std::getline(std::cin, username);
+        if (!isValidUsername(username)) {
+            std::cout << "Please enter a valid username.\n\n";
+        }
+    } while (!isValidUsername(username));
+
+    do {
+        std::cout << "\nPassword: ";
+        std::getline(std::cin, password);
+        if (!isValidPassword(password)) {
+            std::cout << "Please enter a valid password (at least 6 characters).\n\n";
+        }
+    } while (!isValidPassword(password));
+
+    do {
+        std::cout << "\nEmail: ";
+        std::getline(std::cin, email);
+        if (!isValidEmail(email)) {
+            std::cout << "Please enter a valid email address.\n\n";
+        }
+    } while (!isValidEmail(email));
+
+    std::cout << "\nSigned up successfully.\n\n";
 }
 
 void sign_in()
